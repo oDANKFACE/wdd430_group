@@ -5,3 +5,6 @@
 * Darien Weller
 * Garrett Ourth
 * Gisela Camacho Huerta
+
+
+Garrett-Review and ratings system and product listing management.
