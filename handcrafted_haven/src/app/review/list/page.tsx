@@ -18,7 +18,8 @@ const ReviewList: React.FC<ReviewListProps> = ({ reviews }) => {
       <ul>
         {reviews.map((review) => (
           <li key={review.id}>
-            <strong>{review.user}</strong>: {review.comment} - Rating: {review.rating}
+            <strong>{review.user}</strong>: {review.comment} - Rating:{' '}
+            {review.rating}
           </li>
         ))}
       </ul>

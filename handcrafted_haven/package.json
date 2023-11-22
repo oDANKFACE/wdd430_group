@@ -6,12 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "prebuild": "npm run build:styles",
-    "build:styles": "postcss styles/tailwind.css -o public/styles/tailwind.css"
+    "lint": "next lint"
   },
   "dependencies": {
-    "next": "14.0.2",
+    "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18"
   },

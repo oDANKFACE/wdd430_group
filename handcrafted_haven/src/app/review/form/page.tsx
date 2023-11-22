@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, ChangeEvent } from 'react';
 
 interface Review {
@@ -11,11 +12,15 @@ interface ReviewFormProps {
   onAddReview: (review: Review) => void;
 }
 
-const ReviewForm: React.FC<ReviewFormProps> = ({  }) => {
+const ReviewForm: React.FC<ReviewFormProps> = ({}) => {
   const [userName, setUserName] = useState<string>('');
   const [comment, setComment] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
-  const onAddReview = (newReview:Review) => {console.log(newReview)}
+
+  const onAddReview = (newReview: Review) => {
+    console.log(newReview);
+  };
+
   const handleAddReview = (): void => {
     // Perform validation if needed
     if (userName && comment && rating > 0 && rating <= 5) {
@@ -42,14 +47,18 @@ const ReviewForm: React.FC<ReviewFormProps> = ({  }) => {
         <input
           type="text"
           value={userName}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setUserName(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setUserName(e.target.value)
+          }
         />
       </div>
       <div>
         <label>Comment:</label>
         <textarea
           value={comment}
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+            setComment(e.target.value)
+          }
         />
       </div>
       <div>
@@ -59,7 +68,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({  }) => {
           min="1"
           max="5"
           value={rating}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setRating(parseInt(e.target.value, 10))}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setRating(parseInt(e.target.value, 10))
+          }
         />
       </div>
       <button onClick={handleAddReview}>Add Review</button>
@@ -68,5 +79,3 @@ const ReviewForm: React.FC<ReviewFormProps> = ({  }) => {
 };
 
 export default ReviewForm;
-
-

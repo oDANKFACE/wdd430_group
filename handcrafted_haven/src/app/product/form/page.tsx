@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, ChangeEvent } from 'react';
 
 interface Product {
@@ -10,10 +11,13 @@ interface ProductFormProps {
   onAddProduct: (product: Product) => void;
 }
 
-const ProductForm: React.FC<ProductFormProps> = ({  }) => {
+const ProductForm: React.FC<ProductFormProps> = ({}) => {
   const [productName, setProductName] = useState<string>('');
   const [productPrice, setProductPrice] = useState<string>('');
-  const onAddProduct = (newProduct:Product) => {console.log(newProduct)}
+
+  const onAddProduct = (newProduct: Product) => {
+    console.log(newProduct);
+  };
 
   const handleAddProduct = (): void => {
     // Perform validation if needed
@@ -33,13 +37,15 @@ const ProductForm: React.FC<ProductFormProps> = ({  }) => {
 
   return (
     <div>
-      <h2 className={"text-red-700"}>Add New Product</h2>
+      <h2 className={'text-red-700'}>Add New Product</h2>
       <div>
         <label>Name:</label>
         <input
           type="text"
           value={productName}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setProductName(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setProductName(e.target.value)
+          }
         />
       </div>
       <div>
@@ -47,7 +53,9 @@ const ProductForm: React.FC<ProductFormProps> = ({  }) => {
         <input
           type="text"
           value={productPrice}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setProductPrice(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setProductPrice(e.target.value)
+          }
         />
       </div>
       <button onClick={handleAddProduct}>Add Product</button>
