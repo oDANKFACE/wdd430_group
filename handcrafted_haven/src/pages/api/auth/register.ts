@@ -5,7 +5,9 @@ import bcrypt from 'bcryptjs';
 
 const POST = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { firstName, lastName, email, password } = JSON.parse(JSON.stringify(req.body));
+    const { firstName, lastName, email, password } = JSON.parse(
+      JSON.stringify(req.body),
+    );
     if (!firstName || !lastName || !email || !password) {
       return res.status(422).json({ message: 'Invalid data' });
     }
@@ -22,8 +24,8 @@ const POST = async (req: NextApiRequest, res: NextApiResponse) => {
         password: hashedPassword,
       },
     });
-
-    return res.status(201).send('Success');
+    console.log({ user });
+    return res.status(201).send({ success: 'success' });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Server Error' });
