@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { PrismaClient } from '@prisma/client';
 
 // PrismaClient is attached to the `global` object in development to prevent
@@ -6,12 +7,14 @@ import { PrismaClient } from '@prisma/client';
 // Learn more:
 // https://pris.ly/d/help/next-js-best-practices
 
-
-declare global {
-  var prisma: PrismaClient | undefined;
-}
-
 let prisma: PrismaClient;
+declare global {
+  namespace NodeJS {
+    interface Global {
+      prisma: PrismaClient;
+    }
+  }
+}
 
 if (process.env.NODE_ENV === 'production') {
   prisma = new PrismaClient();

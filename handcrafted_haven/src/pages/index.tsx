@@ -3,10 +3,25 @@ import Section from '@/components/Section';
 import Card from '@/components/Card';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
+import { useSession, signIn } from 'next-auth/react';
+import { useEffect } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      signIn();
+    }
+  }, [status]);
+
+  if (status !== 'authenticated') {
+    return (
+      <>Loading...</>
+    );
+  }
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between  ${inter.className}`}
@@ -41,20 +56,20 @@ export default function Home() {
           <Card
             title="Shop Sustainably"
             description="At Handcrafted Haven, we believe in the beauty of mindful
-            consumption. Support local artisans and choose sustainable,
-            one-of-a-kind products that stand the test of time."
+          consumption. Support local artisans and choose sustainable,
+          one-of-a-kind products that stand the test of time."
           />
           <Card
             title="Community of Crafters"
             description="Join a vibrant community of like-minded individuals who appreciate
-            the art of handmade. Engage in discussions, share your insights, and
-            be a part of a supportive network that celebrates creativity."
+          the art of handmade. Engage in discussions, share your insights, and
+          be a part of a supportive network that celebrates creativity."
           />
           <Card
             title=" Global Marketplace"
             description="Whether you're a creator or a customer, Handcrafted Haven connects
-            you with a global marketplace. Discover treasures from artisans
-            around the world and be a part of a diverse and rich community."
+          you with a global marketplace. Discover treasures from artisans
+          around the world and be a part of a diverse and rich community."
           />
         </div>
       </Section>
