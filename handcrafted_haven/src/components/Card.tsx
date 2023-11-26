@@ -4,11 +4,13 @@ interface CardProps {
   title: string;
   description: string;
   imageUrl?: string;
+  className?: string;
 }
 
-const Card = ({ title, description, imageUrl }: CardProps) => {
+const Card = ({ title, description, imageUrl, className }: CardProps) => {
+  const customStyles = className;
   return (
-    <div className="max-w-md mx-1 my-1 bg-white rounded-md overflow-hidden shadow-md">
+    <div className={`max-w-md mx-1 my-1 bg-white rounded-md overflow-hidden shadow-md ${customStyles}`}>
       {imageUrl && (
         <img className="w-full h-40 object-cover" src={imageUrl} alt={title} />
       )}
