@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { signOut } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 
 const Navbar = () => {
+  const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -13,7 +14,7 @@ const Navbar = () => {
   const handleSignOut = async (e: React.MouseEvent) => {
     e.preventDefault();
     await signOut();
-  }
+  };
 
   return (
     <nav className="border-gray-200 bg-gray-900 w-full">
@@ -89,6 +90,16 @@ const Navbar = () => {
                 Artists
               </Link>
             </li>
+            {status === 'authenticated' && (
+              <li>
+                <Link
+                  href={`/artists/${session?.user?.id}`}
+                  className="block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-secondary md:p-0 text-white hover:bg-gray-700 md:hover:bg-transparent"
+                >
+                  Profile
+                </Link>
+              </li>
+            )}
             <li>
               <a
                 onClick={handleSignOut}

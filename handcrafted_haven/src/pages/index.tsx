@@ -5,11 +5,12 @@ import Section from '@/components/Section';
 import Card from '@/components/Card';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
+import Loader from '@/components/Loader';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -18,8 +19,9 @@ export default function Home() {
   }, [status]);
 
   if (status !== 'authenticated') {
-    return <>Loading...</>;
+    return <Loader size={'xl'} />;
   }
+
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between  ${inter.className}`}
