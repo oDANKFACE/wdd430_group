@@ -2,22 +2,16 @@ import { PrismaClient, Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const userData: Prisma.UserCreateInput[] = [
-  {
-    email: 'k@test.com',
-    password: 'test',
-    role: 'ADMIN',
-    firstName: 'Kendra',
-    lastName: 'Bryant',
-  },
-];
-
-const productData: Prisma.ProductCreateInput = {
-  name: 'Knitted blanket',
-  description: "The best blanket you'll ever own",
-  price: 50,
-  category: 'Handmade Item',
-  creator: {
+const userData: Prisma.UserCreateInput = {
+  email: 'k@test.com',
+  password: 'test',
+  role: 'ADMIN',
+  firstName: 'Kendra',
+  lastName: 'Bryant',
+};
+const sellerData: Prisma.SellerProfileCreateInput = {
+  bio: 'A yarn dyer.',
+  user: {
     connect: {
       email: 'k@test.com',
     },
@@ -26,12 +20,34 @@ const productData: Prisma.ProductCreateInput = {
 
 async function main() {
   console.log(`Start seeding ...`);
-  for (const u of userData) {
-    const user = await prisma.user.create({
-      data: u,
-    });
-    console.log(`Created user with id: ${user.id}`);
-  }
+
+  const user = await prisma.user.create({
+    data: userData,
+  });
+  console.log(`Created user with id: ${user.id}`);
+
+  const seller = await prisma.sellerProfile.create({
+    data: {
+      ...sellerData,
+      user: {
+        connect: {
+          id: user.id,
+        },
+      },
+    },
+  });
+
+  const productData: Prisma.ProductCreateInput = {
+    name: 'Knitted blanket',
+    description: "The best blanket you'll ever own",
+    price: 50,
+    category: 'Handmade Item',
+    seller: {
+      connect: {
+        id: seller.id,
+      },
+    },
+  };
 
   const product = await prisma.product.create({
     data: productData,

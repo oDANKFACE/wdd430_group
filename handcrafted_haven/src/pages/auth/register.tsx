@@ -10,6 +10,7 @@ const SignIn: React.FC<SignInProps> = () => {
   const [repeatPassword, setRepeatPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [seller, setSeller] = useState('');
 
   const handleRegistration = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,6 +27,7 @@ const SignIn: React.FC<SignInProps> = () => {
           body: JSON.stringify({
             firstName,
             lastName,
+            seller,
             email,
             password,
           }),
@@ -106,6 +108,36 @@ const SignIn: React.FC<SignInProps> = () => {
               onChange={(e) => setLastName(e.target.value)}
               required
             />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="seller"
+            >
+              Do you want to list items for sale?
+            </label>
+            <div className="relative inline-flex w-full">
+              <svg
+                className="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 412 232"
+              >
+                <path
+                  d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.58-9.763 25.412 0 35.176l189 189c9.763 9.763 25.592 9.763 35.355 0l189-189c9.582-9.763 9.582-25.596 0-35.176-9.763-9.763-25.592-9.763-35.355 0L206 171.144z"
+                  fill="#648299"
+                  fillRule="nonzero"
+                />
+              </svg>
+              <select
+                id="seller"
+                value={seller}
+                onChange={(e) => setSeller(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight duration-300 focus:outline-none focus:shadow-outline focus:border-transparent focus:ring-4 focus:ring-secondary"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
           </div>
           <div className="mb-4">
             <label
