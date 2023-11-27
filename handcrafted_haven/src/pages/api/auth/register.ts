@@ -5,10 +5,10 @@ import bcrypt from 'bcryptjs';
 
 const POST = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { firstName, lastName, email, password } = JSON.parse(
+    const { firstName, lastName, seller, email, password } = JSON.parse(
       JSON.stringify(req.body),
     );
-    if (!firstName || !lastName || !email || !password) {
+    if (!firstName || !lastName || !seller || !email || !password) {
       return res.status(422).json({ message: 'Invalid data' });
     }
 
@@ -24,7 +24,19 @@ const POST = async (req: NextApiRequest, res: NextApiResponse) => {
         password: hashedPassword,
       },
     });
-    console.log({ user });
+
+    if (!!seller) {
+      await prisma.sellerProfile.create({
+        data: {
+          user: {
+            connect: {
+              id: user.id
+            }
+          }
+        }
+      })
+    }
+
     return res.status(201).send({ success: 'success' });
   } catch (error) {
     console.log(error);
