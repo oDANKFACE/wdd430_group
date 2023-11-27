@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession, signOut, signIn } from 'next-auth/react';
 
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -14,6 +14,11 @@ const Navbar = () => {
   const handleSignOut = async (e: React.MouseEvent) => {
     e.preventDefault();
     await signOut();
+  };
+
+  const handleSignIn = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    await signIn();
   };
 
   return (
@@ -100,15 +105,28 @@ const Navbar = () => {
                 </Link>
               </li>
             )}
-            <li>
-              <a
-                onClick={handleSignOut}
-                href="#"
-                className="block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-secondary md:p-0 text-white hover:bg-gray-700 md:hover:bg-transparent"
-              >
-                Sign Out
-              </a>
-            </li>
+            {status === 'unauthenticated' && (
+              <li>
+                <a
+                  onClick={handleSignIn}
+                  href="#"
+                  className="block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-secondary md:p-0 text-white hover:bg-gray-700 md:hover:bg-transparent"
+                >
+                  Sign In
+                </a>
+              </li>
+            )}
+            {status === 'authenticated' && (
+              <li>
+                <a
+                  onClick={handleSignOut}
+                  href="#"
+                  className="block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-secondary md:p-0 text-white hover:bg-gray-700 md:hover:bg-transparent"
+                >
+                  Sign Out
+                </a>
+              </li>
+            )}
           </ul>
         </div>
       </div>

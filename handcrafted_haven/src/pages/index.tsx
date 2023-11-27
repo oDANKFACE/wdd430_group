@@ -6,11 +6,12 @@ import Card from '@/components/Card';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import Loader from '@/components/Loader';
+import withLayout from '@/components/hoc/withLayout';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function Home() {
-  const { status } = useSession();
+const Home = () => {
+ /*  const { status } = useSession();
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -20,13 +21,13 @@ export default function Home() {
 
   if (status !== 'authenticated') {
     return <Loader size={'xl'} />;
-  }
+  } */
 
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between  ${inter.className}`}
     >
-      <Navbar />
+      {/* <Navbar /> */}
       <Section>
         <div className="text-center">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
@@ -91,7 +92,9 @@ export default function Home() {
           </p>
         </div>
       </Section>
-      <Footer />
+      {/* <Footer /> */}
     </main>
   );
 }
+
+export default withLayout(Home);
