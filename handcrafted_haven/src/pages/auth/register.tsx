@@ -10,7 +10,7 @@ const SignIn: React.FC<SignInProps> = () => {
   const [repeatPassword, setRepeatPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [seller, setSeller] = useState('');
+  const [seller, setSeller] = useState('No');
 
   const handleRegistration = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
