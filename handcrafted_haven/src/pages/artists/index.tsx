@@ -12,7 +12,7 @@ interface ArtistProps {
 const Artists = ({ artists }: ArtistProps) => {
   return (
     <div
-      className={`flex min-h-screen flex-col items-center container px-4 md:px-24 my-10`}
+      className={`flex min-h-screen flex-col items-center px-4 md:px-24 my-10`}
     >
       <h1 className="text-4xl mb-10">Artists</h1>
       <div className="w-4/5">
