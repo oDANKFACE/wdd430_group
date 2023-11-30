@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useSession, signOut, signIn } from 'next-auth/react';
+import { SessionUser } from '@/types';
 
 const Navbar = () => {
+  const router = useRouter();
   const { data: session, status } = useSession();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activePage, setActivePage] = useState('Home');
+
+  const user = session?.user as SessionUser;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -20,6 +27,11 @@ const Navbar = () => {
     e.preventDefault();
     await signIn();
   };
+
+  useEffect(() => {
+    const currentUrl = router.asPath;
+    setActivePage(currentUrl);
+  }, []);
 
   return (
     <nav className="border-gray-200 bg-gray-900 w-full">
@@ -73,7 +85,11 @@ const Navbar = () => {
             <li>
               <Link
                 href="/"
-                className="block py-2 px-3 text-gray-800 bg-secondary rounded md:bg-transparent md:text-emerald-200 md:p-0 md:text-secondary"
+                className={`block py-2 px-3 rounded md:p-0  ${
+                  activePage === '/'
+                    ? 'md:text-secondary md:bg-transparent bg-secondary text-dark'
+                    : 'md:hover:bg-transparent md:hover:text-secondary hover:bg-gray-700 text-white'
+                }`}
                 aria-current="page"
               >
                 Home
@@ -82,7 +98,11 @@ const Navbar = () => {
             <li>
               <Link
                 href="/products"
-                className="block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-secondary md:p-0 text-white hover:bg-gray-700 md:hover:bg-transparent"
+                className={`block py-2 px-3 rounded md:p-0  ${
+                  activePage.includes('/products')
+                    ? 'md:text-secondary md:bg-transparent bg-secondary text-dark'
+                    : 'md:hover:bg-transparent md:hover:text-secondary hover:bg-gray-700 text-white'
+                }`}
               >
                 Products
               </Link>
@@ -90,7 +110,11 @@ const Navbar = () => {
             <li>
               <Link
                 href="/artists"
-                className="block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-secondary md:p-0 text-white hover:bg-gray-700 md:hover:bg-transparent"
+                className={`block py-2 px-3 rounded md:p-0  ${
+                  activePage.includes('/artists')
+                    ? 'md:text-secondary md:bg-transparent bg-secondary text-dark'
+                    : 'md:hover:bg-transparent md:hover:text-secondary hover:bg-gray-700 text-white'
+                }`}
               >
                 Artists
               </Link>
@@ -98,10 +122,28 @@ const Navbar = () => {
             {status === 'authenticated' && (
               <li>
                 <Link
-                  href={`/artists/${session?.user?.id}`}
-                  className="block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-secondary md:p-0 text-white hover:bg-gray-700 md:hover:bg-transparent"
+                  href={`/artists/${user?.id}`}
+                  className={`block py-2 px-3 rounded md:p-0  ${
+                    activePage.includes('/artists/')
+                      ? 'md:text-secondary md:bg-transparent bg-secondary text-dark'
+                      : 'md:hover:bg-transparent md:hover:text-secondary hover:bg-gray-700 text-white'
+                  }`}
                 >
                   Profile
+                </Link>
+              </li>
+            )}
+            {status === 'authenticated' && user.role === 'ADMIN' && (
+              <li>
+                <Link
+                  href={`/admin/dashboard`}
+                  className={`block py-2 px-3 rounded md:p-0  ${
+                    activePage.includes('/admin')
+                      ? 'md:text-secondary md:bg-transparent bg-secondary text-dark'
+                      : 'md:hover:bg-transparent md:hover:text-secondary hover:bg-gray-700 text-white'
+                  }`}
+                >
+                  Admin
                 </Link>
               </li>
             )}
@@ -116,6 +158,7 @@ const Navbar = () => {
                 </a>
               </li>
             )}
+
             {status === 'authenticated' && (
               <li>
                 <a

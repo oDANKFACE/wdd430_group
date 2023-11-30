@@ -1,8 +1,9 @@
 interface LoaderProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | null;
+  fullPage?: boolean;
 }
 
-const Loader = ({ size = 'md' }: LoaderProps) => {
+const Loader = ({ size = 'md', fullPage = true }: LoaderProps) => {
   let loaderSize = '';
   switch (size) {
     case 'sm':
@@ -19,7 +20,7 @@ const Loader = ({ size = 'md' }: LoaderProps) => {
       loaderSize = 'h-10 w-10';
   }
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className={`flex justify-center items-center ${!!fullPage && 'min-h-screen'}`}>
       <div
         className={`animate-spin rounded-full ${loaderSize} border-t-2 border-b-2 border-secondary`}
       ></div>
