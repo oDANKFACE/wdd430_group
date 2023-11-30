@@ -14,11 +14,11 @@ export interface User {
 
 export interface Artist {
   id: string;
-  firstName?: string;
-  lastName?: string;
+  firstName: string;
+  lastName: string;
   sellerProfile?: SellerProfile | null;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
 
 export interface SellerProfile {
@@ -26,28 +26,30 @@ export interface SellerProfile {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   bio?: string | null;
-  userId?: string;
+  userId: string;
   products?: Product[];
 }
 
 export interface Product {
-  id?: string;
-  name?: string;
+  id: string;
+  name: string;
   description?: string | null;
-  price?: number;
+  price: number;
   images?: string[];
-  category?: string;
-  sellerId?: string;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
+  category: string;
+  sellerId: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  reviews?: Review[];
 }
 
 export interface Review {
   id: string;
   rating: number;
   comment?: string;
+  author: User;
   authorEmail: string;
   productId: string;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }

@@ -2,17 +2,9 @@ import React from 'react';
 import { GetServerSideProps } from 'next';
 import withLayout from '@/components/hoc/withLayout';
 import { getBaseUrl } from '@/helpers/utils';
-
-export interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  creatorId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { Product } from '@/types';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface ProductProps {
   products: Product[];
@@ -22,16 +14,38 @@ const url = getBaseUrl();
 
 const Products = ({ products }: ProductProps) => {
   return (
-    <div className={`flex min-h-screen flex-col px-4 md:px-24 my-10`}>
-      <h1 className="text-4xl mb-5">Product Listings</h1>
-      <div className="border rounded p-4">
-        <div className="flex border">
-          {products.map((p) => (
-            <div key={p.id} className="border  border-accent">
-              {p.name} - ${p.price}.00
+    <div className="container mx-auto p-6 border border-white rounded mt-5">
+      <h1 className="text-3xl font-semibold mb-4">Our Products</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {products.map((product) => (
+          <Link href={`/products/${product.id}`} key={product.id} className="">
+            <div className="bg-gray-200 p-4 rounded-md shadow-md hover:scale-105 transition-transform duration-300 ease-in-out border-4 border-accent">
+              {/* Product Image */}
+              {!!product.images?.length && (
+                <Image
+                  src={product.images[0]}
+                  alt={product.name}
+                  width={50}
+                  height={50}
+                  className="w-full h-32 object-cover mb-2 rounded-md"
+                />
+              )}
+
+              {/* Product Details */}
+              <div className="flex justify-between font-semibold text-gray-800 text-lg">
+                <h2 className="mb-2">{product.name}</h2>
+                <p className="">${product.price}</p>
+              </div>
+              <p className="text-gray-700 mb-2">{product.description}</p>
+
+              {/* Additional Product Information */}
+              <div className="mt-2 flex text-gray-600 text-sm font-semibold">
+                <p>Category: &nbsp;</p>
+                <p>{product.category}</p>
+              </div>
             </div>
-          ))}
-        </div>
+          </Link>
+        ))}
       </div>
     </div>
   );
