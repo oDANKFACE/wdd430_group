@@ -25,7 +25,7 @@ const POST = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     });
 
-    if (!!seller) {
+    if (!!seller && seller === 'Yes') {
       await prisma.sellerProfile.create({
         data: {
           user: {

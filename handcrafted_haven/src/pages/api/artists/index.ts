@@ -9,6 +9,15 @@ export default async function handle(
 ) {
   try {
     const artists = await prisma.user.findMany({
+      where: {
+        sellerProfile: {
+          is: {
+            userId: {
+              not: undefined,
+            }
+          }
+        }
+      },
       select: {
         id: true,
         firstName: true,
