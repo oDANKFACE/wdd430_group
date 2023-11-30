@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -21,6 +22,12 @@ const ProductDetailsPage = ({ product }: ProductDetailsProps) => {
 
   const user = session?.user as User;
 
+  useEffect(() => {
+    if (!!product?.images?.length) {
+      setSelectedImg(product.images[0]);
+    }
+  }, [product.images]);
+
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
@@ -34,19 +41,13 @@ const ProductDetailsPage = ({ product }: ProductDetailsProps) => {
     setSelectedImg(i);
   };
 
-  useEffect(() => {
-    if (!!product?.images?.length) {
-      setSelectedImg(product.images[0]);
-    }
-  }, []);
-
   return (
     <>
       <div className="container mx-auto p-6 border border-white rounded my-5">
         <h1 className="text-3xl font-semibold mb-4">Product Details</h1>
         <div className="flex flex-col md:flex-row w-full sm:w-4/5 lg:w-1/2 border-4 border-accent rounded p-4 bg-gray-200 mx-auto">
           <div className="">
-            {product?.images?.length && (
+            {!!product?.images?.length && (
               <>
                 <div className="relative h-64 w-64 mb-4 mx-auto">
                   {selectedImg && (
@@ -190,9 +191,9 @@ const ProductDetailsPage = ({ product }: ProductDetailsProps) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<ProductDetailsProps> = async (
-  context,
-) => {
+export const getServerSideProps: GetServerSideProps<
+  ProductDetailsProps
+> = async (context) => {
   const { params } = context;
 
   try {
@@ -206,7 +207,7 @@ export const getStaticProps: GetStaticProps<ProductDetailsProps> = async (
       };
     }
 
-    const product = await response.json();
+    const product: Product = await response.json();
 
     return {
       props: {
@@ -214,34 +215,9 @@ export const getStaticProps: GetStaticProps<ProductDetailsProps> = async (
       },
     };
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching data:', error);
     return {
       notFound: true,
-    };
-  }
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  try {
-    const paths = await getProductIds();
-
-    if (paths === undefined) {
-      console.error('Error fetching artist IDs.');
-      return {
-        paths: [],
-        fallback: false,
-      };
-    }
-
-    return {
-      paths: paths.map((id) => ({ params: { id } })),
-      fallback: false,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      paths: [],
-      fallback: false,
     };
   }
 };

@@ -47,7 +47,7 @@ const ReviewForm = () => {
     if (reviewId) {
       fetchReviewDetails();
     }
-  }, [reviewId]);
+  }, [reviewId, baseUrl]);
 
   useEffect(() => {
     if (!!user && !!review) {
@@ -55,7 +55,7 @@ const ReviewForm = () => {
         router.push(`/products/${review.productId}`);
       }
     }
-  }, [user, review]);
+  }, [user, review, router]);
 
   const handleUpdateReview = async () => {
     if (comment && rating > 0 && rating <= 5) {

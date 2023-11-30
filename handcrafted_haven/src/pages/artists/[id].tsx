@@ -92,8 +92,8 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
             <div className="mt-3 flex flex-wrap gap-4">
               {products?.map((p: Product) => {
                 return (
-                  <div className="justify-items-center py-3 gap- w-full text-left">
-                    <Link key={p.id} href={`/products/${p.id}`}>
+                  <div key={p.id} className="justify-items-center py-3 gap- w-full text-left">
+                    <Link href={`/products/${p.id}`}>
                       <h2 className="text-black text-xl font-bold capitalize bg-slate-300">
                         {p.name}
                       </h2>

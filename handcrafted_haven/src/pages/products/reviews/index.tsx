@@ -44,7 +44,7 @@ const ReviewForm = () => {
     if (productId) {
       fetchProductDetails();
     }
-  }, [productId]);
+  }, [productId, baseUrl]);
 
   const handleAddReview = async () => {
     if (comment && rating > 0 && rating <= 5) {
