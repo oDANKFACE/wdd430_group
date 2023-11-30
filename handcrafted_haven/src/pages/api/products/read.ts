@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 
-// GET api/review
-
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -19,7 +17,11 @@ export default async function handle(
         id: String(productId),
       },
       include: {
-        seller: true,
+        seller: {
+          include: {
+            user: true,
+          }
+        },
         reviews: {
           include: {
             author: true,

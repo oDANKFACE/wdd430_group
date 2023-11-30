@@ -7,31 +7,23 @@ export default async function updateReview(
   res: NextApiResponse,
 ) {
   try {
-    if (req.method !== 'PUT') {
+    if (req.method !== 'PATCH') {
       return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    const { rating, comment, authorEmail, productId } =
-      req.body as Review;
+    const { rating, comment, id } = JSON.parse(req.body) as Review;
 
-    if (!rating || !authorEmail || !productId) {
+    if (!rating || !id) {
       return res.status(400).json({ error: 'Missing required parameters.' });
     }
 
-    const review = await prisma.review.create({
+    const review = await prisma.review.update({
+      where: {
+        id,
+      },
       data: {
         rating,
         comment,
-        author: {
-          connect: {
-            email: authorEmail,
-          },
-        },
-        product: {
-          connect: {
-            id: productId,
-          },
-        },
       },
     });
 

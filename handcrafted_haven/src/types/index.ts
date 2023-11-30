@@ -26,6 +26,7 @@ export interface SellerProfile {
   createdAt?: Date | string;
   updatedAt?: Date | string;
   bio?: string | null;
+  user: User;
   userId: string;
   products?: Product[];
 }
@@ -37,6 +38,7 @@ export interface Product {
   price: number;
   images?: string[];
   category: string;
+  seller: SellerProfile;
   sellerId: string;
   createdAt: Date | string;
   updatedAt: Date | string;
@@ -44,12 +46,15 @@ export interface Product {
 }
 
 export interface Review {
-  id: string;
+  id?: string;
   rating: number;
   comment?: string;
-  author: User;
-  authorEmail: string;
-  productId: string;
-  createdAt: Date | string;
-  updatedAt: Date | string;
+  product?: Product;
+  productId?: string;
+  author?: User;
+  authorId?: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  sellerProfile?: SellerProfile;
+  sellerProfileId?: string;
 }

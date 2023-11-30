@@ -7,7 +7,7 @@ export default async function updateProduct(
   res: NextApiResponse,
 ) {
   try {
-    if (req.method !== 'PUT') {
+    if (req.method !== 'PATCH') {
       return res.status(405).json({ error: 'Method Not Allowed' });
     }
 

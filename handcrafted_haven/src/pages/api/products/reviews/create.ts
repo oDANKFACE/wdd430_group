@@ -2,16 +2,14 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../../lib/prisma';
 import { Review } from '@/types';
 
-// GET api/review
-
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   try {
-    const { rating, comment, authorEmail, productId } = req.body as Review;
+    const { rating, comment, authorId, productId } = JSON.parse(req.body) as Review;
 
-    if (!rating || !authorEmail || !productId) {
+    if (!rating || !authorId || !productId) {
       return res.status(400).json({ error: 'Missing required parameters.' });
     }
 
@@ -21,7 +19,7 @@ export default async function handle(
         comment,
         author: {
           connect: {
-            email: authorEmail,
+            id: authorId,
           },
         },
         product: {

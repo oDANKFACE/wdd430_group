@@ -4,6 +4,7 @@ import { Review, Product, User } from '@/types';
 import { useRouter } from 'next/router';
 import { getBaseUrl } from '@/helpers/utils';
 import { useSession, signIn } from 'next-auth/react';
+import Link from 'next/link';
 
 const ReviewForm = () => {
   const router = useRouter();
@@ -11,9 +12,9 @@ const ReviewForm = () => {
 
   const [comment, setComment] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
-  const [product, setProduct] = useState<Product>();
+  const [review, setReview] = useState<Review>();
 
-  const productId = router.query.productId as string;
+  const reviewId = router.query.reviewId as string;
   const user = session?.user as User;
   const baseUrl = getBaseUrl();
 
@@ -24,59 +25,82 @@ const ReviewForm = () => {
   }, [status]);
 
   useEffect(() => {
-    const fetchProductDetails = async () => {
+    const fetchReviewDetails = async () => {
       try {
-        const response = await fetch(
-          `${baseUrl}/api/products/read?productId=${productId}`,
+        const res = await fetch(
+          `${baseUrl}/api/products/reviews/read?reviewId=${reviewId}`,
         );
 
-        if (response.ok) {
-          const product = await response.json();
-          setProduct(product);
+        if (res.ok) {
+          const review = await res.json();
+          setReview(review);
+          setRating(review.rating);
+          setComment(review.comment);
         } else {
-          console.error('Error fetching product details');
+          console.error('Error fetching review details');
         }
       } catch (error) {
-        console.error('Error fetching product details:', error);
+        console.error('Error fetching review details:', error);
       }
     };
 
-    if (productId) {
-      fetchProductDetails();
+    if (reviewId) {
+      fetchReviewDetails();
     }
-  }, [productId]);
+  }, [reviewId]);
 
-  const handleAddReview = async () => {
+  useEffect(() => {
+    if (!!user && !!review) {
+      if (user.id != review.authorId) {
+        router.push(`/products/${review.productId}`);
+      }
+    }
+  }, [user, review]);
+
+  const handleUpdateReview = async () => {
     if (comment && rating > 0 && rating <= 5) {
       const newReview: Review = {
-        authorId: user.id,
-        productId,
+        id: reviewId,
         comment,
         rating,
       };
-
       try {
-        const res = await fetch(`${baseUrl}/api/products/reviews/create`, {
-          method: 'POST',
+        const res = await fetch(`${baseUrl}/api/products/reviews/update`, {
+          method: 'PATCH',
           body: JSON.stringify(newReview),
         });
-
         if (!res.ok) {
-          throw new Error('Failed to create new review.');
+          throw new Error('Failed to update review.');
         }
-
         const review = await res.json();
-        router.push(`/products/${productId}`);
+        router.push(`/products/${review.productId}`);
       } catch (error) {
         console.log(error);
       }
     }
   };
 
+  const handleDeleteReview = async () => {
+    try {
+      const res = await fetch(
+        `${baseUrl}/api/products/reviews/delete?reviewId=${reviewId}`,
+        {
+          method: 'DELETE',
+        },
+      );
+      if (!res.ok) {
+        throw new Error('Failed to delete review.');
+      }
+      router.push(`/products/${review?.productId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-md shadow-md my-5">
       <h2 className="text-2xl font-semibold text-black mb-4">
-        Add a Review for {product?.name}
+        Update Review for {review?.product?.name}
       </h2>
 
       <div className="mb-4">
@@ -107,12 +131,24 @@ const ReviewForm = () => {
           }
         ></textarea>
       </div>
-      <div className="text-center">
-        <button
-          className="bg-secondary text-gray-800 py-2 px-4 rounded-md hover:bg-emerald-200 transition duration-300"
-          onClick={handleAddReview}
+      <div className="flex justify-around">
+        <Link
+          href={`/products/${review?.productId}`}
+          className="w-full text-center border-2 border-gray-500 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition duration-300"
         >
-          Add Review
+          Cancel
+        </Link>
+        <button
+          className="w-full mx-1 border-2 border-red-400 text-gray-800 py-2 px-4 rounded-md hover:bg-red-200 transition duration-300"
+          onClick={handleDeleteReview}
+        >
+          Delete
+        </button>
+        <button
+          className="w-full bg-secondary border-2 border-secondary text-gray-800 py-2 px-4 rounded-md hover:bg-emerald-200 transition duration-300"
+          onClick={handleUpdateReview}
+        >
+          Update
         </button>
       </div>
     </div>

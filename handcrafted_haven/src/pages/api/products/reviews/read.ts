@@ -1,26 +1,28 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../../lib/prisma';
 
-// GET api/review
-
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   try {
-    const { productId } = req.query;
+    const { reviewId } = req.query;
 
-    if (!productId) {
-      return res.status(400).json({ error: 'Missing productId parameter.' });
+    if (!reviewId) {
+      return res.status(400).json({ error: 'Missing reviewId parameter.' });
     }
 
-    const reviews = await prisma.review.findMany({
+    const review = await prisma.review.findFirst({
       where: {
-        productId: String(productId),
+        id: String(reviewId),
       },
+      include: {
+        product: true,
+        author: true,
+      }
     });
 
-    res.status(200).json(reviews);
+    res.status(200).json(review);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error.' });
