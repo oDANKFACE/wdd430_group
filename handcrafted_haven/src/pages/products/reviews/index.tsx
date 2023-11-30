@@ -1,3 +1,5 @@
+import withLayout from '@/components/hoc/withLayout';
+
 import React, { useState, ChangeEvent } from 'react';
 interface Review {
   id: number;
@@ -30,36 +32,49 @@ const ReviewForm: React.FC<ReviewFormProps> = ({  }) => {
     }
   };
   return (
-    <div>
-      <h2>Add a Review</h2>
-      <div>
-        <label>Your Name:</label>
-        <input
-          type="text"
-          value={userName}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setUserName(e.target.value)}
-        />
-      </div>
-      <div>
-        <label>Comment:</label>
-        <textarea
-          value={comment}
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
-        />
-      </div>
-      <div>
-        <label>Rating:</label>
-        <input
-          type="number"
-          min="1"
-          max="5"
-          value={rating}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setRating(parseInt(e.target.value, 10))}
-        />
-      </div>
-      <button onClick={handleAddReview}>Add Review</button>
-    </div>
+    <div className="max-w-md mx-auto p-4 bg-white rounded-md shadow-md">
+  <h2 className="text-2xl font-semibold text-black mb-4">Add a Review</h2>
+  <div className="mb-4">
+    <label className="block text-sm font-medium text-gray-600">Your Name:</label>
+    <input
+      type="text"
+      className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
+      value={userName}
+      onChange={(e: ChangeEvent<HTMLInputElement>) => setUserName(e.target.value)}
+    />
+  </div>
+  <div className="mb-4">
+    <label className="block text-sm font-medium text-gray-600">Comment:</label>
+    <textarea
+      className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
+      value={comment}
+      onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
+    ></textarea>
+  </div>
+  <div className="mb-4">
+    <label className="block text-sm font-medium text-gray-600">Rating:</label>
+    <input
+      type="number"
+      min="1"
+      max="5"
+      className="mt-1 p-2 w-full border border-gray-300 rounded-md text-black"
+      value={rating}
+      onChange={(e: ChangeEvent<HTMLInputElement>) => setRating(parseInt(e.target.value, 10))}
+    />
+  </div>
+  <button
+    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+    onClick={handleAddReview}
+  >
+    Add Review
+  </button>
+</div>
+
+
+
   );
 };
 
-export default ReviewForm;
+// export default ReviewForm;
+
+export default withLayout(ReviewForm);
