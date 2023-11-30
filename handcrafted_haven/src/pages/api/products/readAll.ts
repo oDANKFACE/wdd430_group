@@ -11,7 +11,6 @@ export default async function handle(
     const products = await prisma.product.findMany({
       include: { seller: true, reviews: true },
     });
-    console.log({ products });
     res.status(200).json(products);
   } catch (error) {
     console.error(error);
