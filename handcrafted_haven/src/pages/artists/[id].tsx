@@ -85,26 +85,28 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
           </p>
 
           <div className="py-10">
-            <h5 className="my-4 font-semibold text-gray-700">Products</h5>
+            <h5 className="my-4  text-2xl font-semibold text-gray-700 text-center">Products</h5>
             <div className="mt-3 flex flex-wrap gap-4">
               {products?.map((p: Product) => {
                 return (
-                  <Link className="flex justify-between gap- w-full text-right" key={p.id} href={`/products/${p.id}`}>
-                      <h4 className="text-black capitalize">{p.name}</h4>
-                      <p className="text-gray-500 font-semibold">
+                  <Link className="justify-items-center py-3 gap- w-full text-left" key={p.id} href={`/products/${p.id}`}>
+                      <h2 className="text-black text-xl font-bold capitalize bg-slate-300">
+                        {p.name}
+                      </h2>
+                      <p className="text-gray-500 py-2 font-semibold">
                         ${p.price}.00
                       </p>
                       <p className="text-gray-500 font-semibold">
-                        {p.description}
+                        About the Product: {p.description}
                       </p>
-                      <p className="text-gray-500 font-semibold">
-                        {p.category}
+                      <p className="text-gray-500 py-2 font-semibold">
+                        Category: {p.category}
                       </p>
                       <Image
                         src="/images/art.png"
                         alt="Handcrafted Haven Logo"
-                        width={35}
-                        height={35}
+                        width={50}
+                        height={50}
                       />
                   </Link>
                 );
