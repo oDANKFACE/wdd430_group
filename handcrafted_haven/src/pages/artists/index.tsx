@@ -2,12 +2,14 @@ import React from 'react';
 import { GetServerSideProps } from 'next';
 import withLayout from '@/components/hoc/withLayout';
 import Link from 'next/link';
-import { convertDate } from '@/helpers/utils';
+import { convertDate, getBaseUrl } from '@/helpers/utils';
 import { Artist } from '@/types';
 
 interface ArtistProps {
   artists: Artist[];
 }
+
+const url = getBaseUrl();
 
 const Artists = ({ artists }: ArtistProps) => {
   return (
@@ -37,11 +39,27 @@ const Artists = ({ artists }: ArtistProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch('http://localhost:3000/api/artists');
-  const artists = await res.json();
-  return {
-    props: { artists },
-  };
+  try {
+    const res = await fetch(`${url}/api/artists`);
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
+    }
+
+    const artists = await res.json();
+
+    return {
+      props: { artists },
+    };
+  } catch (error: any) {
+    console.error('Error fetching data:', error.message);
+
+    return {
+      props: {
+        artists: [],
+      },
+    };
+  }
 };
 
 export default withLayout(Artists);

@@ -2,6 +2,7 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient } from '@prisma/client';
+import { getBaseUrl } from '@/helpers/utils';
 
 const prisma = new PrismaClient();
 
@@ -9,6 +10,8 @@ enum SessionStrategy {
   JWT = 'jwt',
   Database = 'database',
 }
+
+const baseUrl = getBaseUrl();
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
@@ -38,7 +41,7 @@ export const authOptions = {
           password: string;
         };
 
-        const res = await fetch(`${process.env.LOGIN_URL}`, {
+        const res = await fetch(`${baseUrl}/api/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

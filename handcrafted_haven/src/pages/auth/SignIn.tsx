@@ -46,7 +46,7 @@ const Signin = () => {
             Discover and support unique handmade treasures.
           </p>
           <p className="flex flex-col items-center justify-center mt-10 text-center">
-            <span>Don't have an account?</span>
+            <span>Don&apos;t have an account?</span>
             <Link href="/auth/register" className="underline">
               Get Started!
             </Link>

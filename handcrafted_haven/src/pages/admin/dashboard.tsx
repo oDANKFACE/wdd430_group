@@ -16,10 +16,6 @@ const Dashboard = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchData(activeTab);
-  }, [activeTab]);
-
   const fetchData = async (tab: string) => {
     try {
       let response, data;
@@ -59,6 +55,11 @@ const Dashboard = () => {
     }
   };
 
+  useEffect(() => {
+    fetchData(activeTab);
+  }, [activeTab, ]);
+
+
   if (user?.role! !== 'ADMIN') {
     return (
       <section className="grid h-screen place-items-center">
@@ -78,7 +79,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className={`flex min-h-screen flex-col container px-4 md:px-24 my-10`}>
+    <div className={`flex min-h-screen flex-col px-4 md:px-24 my-10`}>
       <h1 className="text-4xl">Admin Dashboard</h1>
       <div className="mt-5">
         <div className="flex space-x-4 mb-4">

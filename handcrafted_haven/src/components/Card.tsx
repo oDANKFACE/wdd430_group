@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface CardProps {
   title: string;
@@ -12,7 +13,7 @@ const Card = ({ title, description, imageUrl, className }: CardProps) => {
   return (
     <div className={`max-w-md mx-1 my-1 bg-white rounded-md overflow-hidden shadow-md ${customStyles}`}>
       {imageUrl && (
-        <img className="w-full h-40 object-cover" src={imageUrl} alt={title} />
+        <Image className="w-full h-40 object-cover" src={imageUrl} alt={title} />
       )}
       <div className="p-6">
         <h2 className="text-xl text-center font-semibold text-gray-800">{title}</h2>

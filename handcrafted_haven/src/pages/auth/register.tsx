@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
+import { getBaseUrl } from '@/helpers/utils';
 
 interface SignInProps {}
 
@@ -18,7 +19,7 @@ const SignIn: React.FC<SignInProps> = () => {
       if (!validateForm()) return;
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/register`,
+        `${getBaseUrl()}/api/auth/register`,
         {
           method: 'POST',
           headers: {
