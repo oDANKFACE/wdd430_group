@@ -1,14 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../../lib/prisma';
+import { Review } from '@/types';
 
 // GET api/review
-
-export interface Review {
-  rating: number;
-  comment?: string;
-  authorEmail: string;
-  productId: string;
-}
 
 export default async function handle(
   req: NextApiRequest,

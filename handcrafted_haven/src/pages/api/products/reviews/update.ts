@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../../lib/prisma';
-import { Review } from './create';
+import { Review } from '@/types';
 
 export default async function updateReview(
   req: NextApiRequest,

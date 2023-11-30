@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import withLayout from '@/components/hoc/withLayout';
 import Link from 'next/link';
 import { convertDate } from '@/helpers/utils';
-import { Artist } from '../api/artists';
+import { Artist } from '@/types';
 
 interface ArtistProps {
   artists: Artist[];
