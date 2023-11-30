@@ -19,6 +19,7 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
   const products = artist?.sellerProfile?.products;
 
   const handleChangePhoto = () => {};
+  const handleAddDescription = () => {};
 
   return (
     <div className="flex min-h-screen flex-col px-4 md:px-24 my-10">
@@ -53,7 +54,7 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
                 alt="Profile Photo"
                 width={150}
                 height={150}
-                className="shadow rounded-full max-w-full h-auto align-middle border-none"
+                className="shadow rounded-full max-w-full h-auto align-middle border-4 border-blue-950 p-2"
               />
             </div>
             <div className="my-2">
@@ -85,11 +86,14 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
           </p>
 
           <div className="py-10">
-            <h5 className="my-4  text-2xl font-semibold text-gray-700 text-center">Products</h5>
+            <h5 className="my-4  text-2xl font-semibold text-gray-700 text-center">
+              Products
+            </h5>
             <div className="mt-3 flex flex-wrap gap-4">
               {products?.map((p: Product) => {
                 return (
-                  <Link className="justify-items-center py-3 gap- w-full text-left" key={p.id} href={`/products/${p.id}`}>
+                  <div className="justify-items-center py-3 gap- w-full text-left">
+                    <Link key={p.id} href={`/products/${p.id}`}>
                       <h2 className="text-black text-xl font-bold capitalize bg-slate-300">
                         {p.name}
                       </h2>
@@ -108,7 +112,17 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
                         width={50}
                         height={50}
                       />
-                  </Link>
+                    </Link>
+                    <div className="p-6">
+                      <button
+                        type="button"
+                        className="w-full px-12 py-1 text-lg font-semibold text-dark transition-colors duration-300 bg-secondary rounded-md shadow hover:bg-emerald-400 focus:outline-none focus:ring-emerald-200 focus:ring-4"
+                        onClick={handleAddDescription}
+                      >
+                        Add description
+                      </button>
+                    </div>
+                  </div>
                 );
               })}
             </div>
