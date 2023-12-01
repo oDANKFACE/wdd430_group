@@ -60,6 +60,7 @@ model SellerProfile {
   bio       String?
   user      User      @relation(fields: [userId], references: [id])
   userId    String    @unique @db.ObjectId
+  image     String?
   products  Product[]
   reviews   Review[]
 }

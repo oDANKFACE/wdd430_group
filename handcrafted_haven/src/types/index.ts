@@ -29,6 +29,7 @@ export interface SellerProfile {
   user: User;
   userId: string;
   products?: Product[];
+  image?: string;
 }
 
 export interface Product {

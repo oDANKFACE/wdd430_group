@@ -82,12 +82,6 @@ const Signin = () => {
                 >
                   Password
                 </label>
-                <a
-                  href="#"
-                  className="text-sm text-dark hover:underline focus:text-emerald-400"
-                >
-                  Forgot Password?
-                </a>
               </div>
               <input
                 type="password"
