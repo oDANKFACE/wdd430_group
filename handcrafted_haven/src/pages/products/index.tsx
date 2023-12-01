@@ -5,6 +5,8 @@ import { getBaseUrl } from '@/helpers/utils';
 import { Product } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
+import SearchBar from '@/components/SearchBar';
+import CustomFilter from '@/components/CustomFilter';
 
 interface ProductProps {
   products: Product[];
@@ -14,8 +16,20 @@ const url = getBaseUrl();
 
 const Products = ({ products }: ProductProps) => {
   return (
-    <div className="container mx-auto p-6 border border-white rounded mt-5">
+    <div className="container mx-auto p-6 border border-white rounded mt-1">
       <h1 className="text-3xl font-semibold mb-4">Our Products</h1>
+      <div className="mt-2 padding-x max-width bg-white rounded-md">
+        <div className='filters'>
+          <SearchBar />
+          <div className='filter-container'>
+          <CustomFilter //title="Category" className=""
+          />
+          <CustomFilter //title="Price" className=""
+          />
+        </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {products.map((product) => (
           <Link href={`/products/${product.id}`} key={product.id} className="">

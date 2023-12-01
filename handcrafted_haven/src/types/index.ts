@@ -58,3 +58,9 @@ export interface Review {
   sellerProfile?: SellerProfile;
   sellerProfileId?: string;
 }
+
+export interface SearchArtistProps {
+  artist: string;
+  setArtist: (artist: string) => void;
+  artistName?: Artist[];
+}
