@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
-import { GetStaticProps, GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,7 +7,6 @@ import { useSession, signIn } from 'next-auth/react';
 import withLayout from '@/components/hoc/withLayout';
 import { Product, User } from '@/types';
 import { convertFullDate, getBaseUrl } from '@/helpers/utils';
-import { getProductIds } from '../api/products/read';
 
 interface ProductDetailsProps {
   product: Product;

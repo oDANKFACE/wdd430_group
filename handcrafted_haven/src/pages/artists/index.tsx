@@ -20,7 +20,7 @@ const Artists = ({ artists }: ArtistProps) => {
       <div className="w-4/5">
         {artists.map((a) => (
           <Link href={`/artists/${a.id}`} key={a.id}>
-            <div className="border-2 border-accent rounded-lg w-full my-5 flex justify-between flex-wrap">
+            <div className="border-2 border-accent rounded-lg w-full my-5 flex justify-between flex-wrap hover:scale-105 transition-transform duration-300 ease-in-out">
               <div className="bg-accent p-4 flex-1">
                 <div className="text-2xl">
                   {a.firstName} {a.lastName}
