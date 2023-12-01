@@ -25,3 +25,74 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.text-container {
+  @apply flex flex-col items-start justify-start gap-y-2.5;
+}
+
+.filters {
+  @apply mt-12 w-full flex-between items-center flex-wrap gap-5;
+}
+
+.filter-container {
+  @apply flex justify-start flex-wrap items-center gap-2;
+}
+
+.custom-filter__btn {
+  @apply relative w-full min-w-[127px] flex justify-between items-center cursor-default rounded-lg bg-white py-2 px-3 text-left shadow-md sm:text-sm border;
+}
+
+.custom-filter__options {
+  @apply absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm;
+}
+.max-width {
+  @apply max-w-[1440px] mx-auto;
+}
+
+.padding-x {
+  @apply sm:px-16 px-6;
+}
+
+.padding-y {
+  @apply py-4;
+}
+
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+.flex-between {
+  @apply flex justify-between items-center;
+}
+
+.custom-btn {
+  @apply flex flex-row relative justify-center items-center py-3 px-6 outline-none;
+}
+
+.search-artist {
+  @apply flex-1 max-sm:w-full flex justify-start items-center;
+}
+
+.search-artist__input {
+  @apply w-full h-[48px] pl-12 p-6 bg-white font-extrabold text-primary shadow rounded-l-full max-sm:rounded-full outline-none cursor-pointer text-lg;
+}
+
+.search-artist__options {
+  @apply absolute mt-1 max-h-60 w-full overflow-auto text-blue-100 rounded-md text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm;
+}
+
+.search-artist__option {
+  @apply cursor-default select-none py-2 pl-10 pr-4;
+}
+
+.searchbar {
+  @apply flex items-center justify-start max-sm:flex-col w-full relative max-sm:gap-4 max-w-3xl;
+}
+
+.searchbar__item {
+  @apply flex-1 max-sm:w-full flex justify-start items-center relative;
+}
+
+.searchbar__input {
+  @apply w-full h-[48px] pl-16 px-5 rounded-r-full font-extrabold text-primary text-lg max-sm:rounded-full outline-none cursor-pointer;
+}
