@@ -4,13 +4,20 @@ import { getArtistById, getArtistIds } from '../api/artists';
 import withLayout from '@/components/hoc/withLayout';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Artist, Product, User } from '@/types';
+import { Artist, Product, SellerProfile, User } from '@/types';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import Modal from '@/components/Modal';
+import Modal, { ModalProps } from '@/components/Modal';
+import FileUpload from '@/components/FileUplaod';
+import { getBaseUrl } from '@/helpers/utils';
 
 interface ArtistDetailsProps {
   artist: Artist;
+}
+
+enum ActiveModal {
+  ProfilePic,
+  Bio,
 }
 
 const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
@@ -18,8 +25,15 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
   const { data: session, status } = useSession();
 
   const [userIsArtist, setUserIsArtist] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [profilePicSrc, setProfilePicSrc] = useState('/images/profile-pic.png');
+  const [newProfilePic, setNewProfilePic] = useState<string | null>(null);
+  const [clearFileUpload, setClearFileUpload] = useState(false);
+  const [activeModal, setActiveModal] = useState<ActiveModal>();
+  const [modalProps, setModalProps] = useState<ModalProps>({
+    isOpen: false,
+    title: '',
+    onClose: () => {},
+  });
 
   const user = session?.user as User;
 
@@ -31,10 +45,58 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
 
   const products = artist?.sellerProfile?.products;
 
-  const handleChangePhoto = () => {
-    console.log('Changing Photo');
-    setIsModalOpen(true);
+  const openProfilePicModal = () => {
+    setModalProps((prevState) => ({
+      ...prevState,
+      isOpen: true,
+      title: 'Update Profile Picture',
+    }));
+    setActiveModal(ActiveModal.ProfilePic);
   };
+
+  const openBioModal = () => {
+    setModalProps((prevState) => ({
+      ...prevState,
+      isOpen: true,
+      title: 'Update Bio',
+    }));
+    setActiveModal(ActiveModal.Bio);
+  };
+
+  const handleChangePhoto = async () => {
+    if (!!newProfilePic) {
+      const sellerProfile = {
+        bio: artist.sellerProfile?.bio,
+        image: newProfilePic,
+      };
+
+      try {
+        const res = await fetch(
+          `${getBaseUrl()}/api/artists/update?artistId=${artist.id}`,
+          {
+            method: 'PATCH',
+            body: JSON.stringify(sellerProfile),
+          },
+        );
+
+        if (!res.ok) {
+          throw Error('Failed to update profile picture.');
+        }
+
+        const profile = (await res.json()) as SellerProfile;
+        if (!!profile.image) {
+          setProfilePicSrc(profile.image);
+        } else {
+          setProfilePicSrc('/images/profile-pic.png');
+        }
+        handleClearFile();
+        closeModal();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   const handleEditListing = () => {
     console.log('Changing listing');
   };
@@ -42,7 +104,35 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
     console.log('Changing Bio');
   };
 
-  const closeModal = () => setIsModalOpen(false);
+  const onFileChange = (base64String: string | null) => {
+    if (!!base64String) {
+      setNewProfilePic(base64String);
+    }
+  };
+
+  const handleClearFile = () => {
+    setClearFileUpload(true);
+    setNewProfilePic(null);
+  };
+
+  const closeModal = () =>
+    setModalProps((prevState) => ({
+      ...prevState,
+      isOpen: false,
+    }));
+
+  const acceptHandler = () => {
+    let handler;
+    switch (activeModal) {
+      case ActiveModal.ProfilePic:
+        handler = handleChangePhoto;
+        break;
+      case ActiveModal.Bio:
+        handler = handleEditBio;
+        break;
+    }
+    return handler ? handler() : null;
+  };
 
   useEffect(() => {
     if (!!status && !!session) {
@@ -61,6 +151,12 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
       setProfilePicSrc(artist.sellerProfile.image);
     }
   }, [artist]);
+
+  useEffect(() => {
+    if (!!activeModal) {
+      acceptHandler();
+    }
+  }, [activeModal]);
 
   return (
     <>
@@ -82,7 +178,7 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
                       <button
                         type="button"
                         className="px-2 py-1 ms-0 sm:ms-3 md:ms-0 lg:ms-3 transition-colors duration-300 bg-secondary shadow rounded-full max-w-full hover:bg-emerald-400 focus:outline-none  focus:ring-emerald-200 focus:ring-4 flex text-base mb-1"
-                        onClick={handleEditBio}
+                        onClick={openBioModal}
                       >
                         <div className="flex items-center">
                           <Image
@@ -118,7 +214,7 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
                     <button
                       type="button"
                       className="p-2 transition-colors duration-300 bg-secondary shadow rounded-full max-w-full hover:bg-emerald-400 focus:outline-none  focus:ring-emerald-200 focus:ring-4 flex"
-                      onClick={handleChangePhoto}
+                      onClick={openProfilePicModal}
                     >
                       <Image
                         src="/images/photo.png"
@@ -226,15 +322,31 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
         </div>
       </div>
 
-      <Modal title={'Update Profile Picture'} isOpen={isModalOpen} onClose={closeModal}>
-        <p>Your modal content goes here.</p>
-        d
-        <button
-          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          onClick={closeModal}
-        >
-          Close
-        </button>
+      {/* Profile Pic Modal */}
+      <Modal
+        title={modalProps.title}
+        isOpen={modalProps.isOpen}
+        onClose={closeModal}
+      >
+        <FileUpload
+          onFileChange={onFileChange}
+          onClearFile={handleClearFile}
+          clear={clearFileUpload}
+        />
+        <div className="flex justify-end">
+          <button
+            className="mt-4 mx-3 px-4 py-2 rounded border border-gray-700 hover:bg-gray-500 hover:text-white"
+            onClick={closeModal}
+          >
+            Cancel
+          </button>
+          <button
+            className="mt-4 bg-primary text-white px-4 py-2 rounded hover:bg-blue-800"
+            onClick={acceptHandler}
+          >
+            Update
+          </button>
+        </div>
       </Modal>
     </>
   );

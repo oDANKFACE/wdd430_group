@@ -1,15 +1,14 @@
-interface ModalProps {
+export interface ModalProps {
   isOpen: boolean;
+  title: string;
   onClose: () => void;
-  children: React.ReactNode;
-  title?: string;
+  children?: React.ReactNode;
 }
 
 const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   const modalClasses = isOpen
     ? 'fixed inset-0 flex items-center justify-center z-50'
     : 'hidden';
-
   return (
     <div className={modalClasses}>
       <div className="fixed inset-0 bg-black opacity-50"></div>
