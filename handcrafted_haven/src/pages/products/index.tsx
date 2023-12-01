@@ -30,7 +30,7 @@ const Products = ({ products }: ProductProps) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {products.map((product) => (
           <Link href={`/products/${product.id}`} key={product.id} className="">
             <div className="bg-gray-200 p-4 rounded-md shadow-md hover:scale-105 transition-transform duration-300 ease-in-out border-4 border-accent">
