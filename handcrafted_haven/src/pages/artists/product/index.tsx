@@ -6,6 +6,8 @@ import { Product, User } from '@/types';
 import { getBaseUrl } from '@/helpers/utils';
 import withLayout from '@/components/hoc/withLayout';
 import { useSession } from 'next-auth/react';
+import FileUpload from '@/components/FileUpload';
+import Image from 'next/image';
 
 const ProductFormPage = () => {
   const router = useRouter();
@@ -14,6 +16,7 @@ const ProductFormPage = () => {
   const { productId } = router.query;
   const user = session?.user as User;
 
+  const [clearFileUpload, setClearFileUpload] = useState(false);
   const [product, setProduct] = useState<Product>({
     name: '',
     description: '',
@@ -90,6 +93,19 @@ const ProductFormPage = () => {
     }
   };
 
+  const handleImageChange = (base64Strings: string[]) => {
+    setProduct((prevProduct) => ({ ...prevProduct, images: base64Strings }));
+    setClearFileUpload(true);
+  };
+
+  const handleDeleteImage = (index: number) => {
+    setProduct((prevProduct) => {
+      const updatedImages = [...(prevProduct.images ?? [])];
+      updatedImages.splice(index, 1);
+      return { ...prevProduct, images: updatedImages };
+    });
+  };
+
   return (
     <div className="flex flex-col px-2 md:px-24 my-10">
       <h1 className="text-3xl font-semibold mb-4">
@@ -118,8 +134,34 @@ const ProductFormPage = () => {
             value={product.category}
             onChange={(value) => handleInputChange('category', value)}
           />
+          <div className="h-40 flex">
+            {product.images?.map((i, index) => (
+              <div key={index} className="relative h-full w-full m-1">
+                <Image
+                  src={i}
+                  alt={product.name ?? 'Product'}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                />
+                <button
+                  type="button"
+                  className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded"
+                  onClick={() => handleDeleteImage(index)}
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+          <FileUpload
+            onFileChange={handleImageChange}
+            multiple={true}
+            onClearFile={() =>
+              setProduct((prevProduct) => ({ ...prevProduct, images: [] }))
+            }
+            clear={clearFileUpload}
+          />
 
-          {/* Other input fields for images, etc. */}
           <div className="flex flex-col sm:flex-row justify-around">
             <button
               type="button"

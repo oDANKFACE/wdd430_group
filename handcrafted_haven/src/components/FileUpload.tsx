@@ -1,28 +1,35 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 interface FileUploadProps {
-  onFileChange: (base64String: string | null) => void;
+  onFileChange: (base64Strings: string[]) => void;
   onClearFile: () => void;
   clear: boolean;
+  multiple?: boolean;
 }
 
-const FileUpload = ({ onFileChange, onClearFile, clear }: FileUploadProps) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+const FileUpload = ({
+  onFileChange,
+  onClearFile,
+  clear,
+  multiple = false,
+}: FileUploadProps) => {
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
 
     if (files && files.length > 0) {
-      const selected = files[0];
-      setSelectedFile(selected);
+      const selected = Array.from(files);
+      setSelectedFiles(selected);
 
-      const base64 = await convertToBase64(selected);
+      const base64Promises = selected.map((file) => convertToBase64(file));
+      const base64Strings = await Promise.all(base64Promises);
 
-      onFileChange(base64);
+      onFileChange(base64Strings);
     } else {
-      setSelectedFile(null);
-      onFileChange(null);
+      setSelectedFiles([]);
+      onFileChange([]);
     }
   };
 
@@ -46,8 +53,8 @@ const FileUpload = ({ onFileChange, onClearFile, clear }: FileUploadProps) => {
   };
 
   const handleClearFile = () => {
-    setSelectedFile(null);
-    onFileChange(null);
+    setSelectedFiles([]);
+    onFileChange([]);
 
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -63,17 +70,31 @@ const FileUpload = ({ onFileChange, onClearFile, clear }: FileUploadProps) => {
   }, [clear]);
 
   return (
-    <div className="mt-4">
-      <label className="block text-gray-700">Choose a file</label>
+    <div className="my-4">
+      <label className="block text-gray-600 text-sm font-bold mb-1">
+        Choose file {multiple && '(s)'}
+      </label>
       <input
         ref={fileInputRef}
         type="file"
         accept=".jpg, .jpeg, .png"
-        className="mt-1 block w-full border border-gray-300 py-2 px-3 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+        className="mt-1 block w-full border border-gray-300 py-2 px-3 rounded-md focus:outline-none focus:ring focus:border-blue-300 bg-white text-gray-800"
         onChange={handleFileChange}
+        multiple={multiple}
       />
-      {selectedFile && (
-        <p className="mt-2 text-green-500">{`Selected file: ${selectedFile.name}`}</p>
+      {selectedFiles.length > 0 && (
+        <div className="mt-2">
+          <p className="text-green-600 font-semibold">
+            Selected file{multiple && 's'}:
+          </p>
+          <ul>
+            {selectedFiles.map((file) => (
+              <li key={file.name} className="text-gray-800">
+                {file.name}
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );

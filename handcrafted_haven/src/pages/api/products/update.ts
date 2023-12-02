@@ -38,7 +38,11 @@ export default async function updateProduct(
         price: typeof price === 'string' ? +price : price,
         images,
         category,
-        sellerId,
+        seller: {
+          connect: {
+            userId: sellerId,
+          },
+        },
       },
     });
 

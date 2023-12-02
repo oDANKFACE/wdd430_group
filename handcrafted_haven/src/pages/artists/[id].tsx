@@ -140,12 +140,13 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
     }
   };
 
-  const onFileChange = (base64String: string | null) => {
-    if (!!base64String) {
-      setNewProfilePic(base64String);
+  const onFileChange = (base64Strings: string[] | null) => {
+    if (base64Strings && base64Strings.length > 0) {
+      setNewProfilePic(base64Strings[0]);
+    } else {
+      setNewProfilePic('');
     }
   };
-
   const handleClearFile = () => {
     setClearFileUpload(true);
     setNewProfilePic(null);
