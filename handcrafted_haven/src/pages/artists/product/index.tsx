@@ -28,8 +28,6 @@ const ProductFormPage = () => {
 
   const baseUrl = getBaseUrl();
 
-  console.log({ productId });
-
   useEffect(() => {
     if (productId) {
       getProduct();
@@ -52,7 +50,6 @@ const ProductFormPage = () => {
       if (!res.ok) {
         throw Error(productData);
       }
-      console.log({ productData });
       setProduct(productData);
     } catch (error) {
       console.error('Error fetching product:', error);

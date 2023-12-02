@@ -47,8 +47,6 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
 
   const user = session?.user as User;
 
-  console.log({ artist });
-
   if (router.isFallback) {
     return <div>Loading...</div>;
   }

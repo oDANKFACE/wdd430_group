@@ -12,7 +12,6 @@ export default async function updateProduct(
     }
 
     const { productId } = req.query;
-    console.log({ productId });
 
     if (!productId) {
       return res
