@@ -4,3 +4,11 @@ export const artists = [
     "Darien Weller",
     "Garret Ourth"
   ];
+
+
+  export const categories = [
+    "Handmade item",
+    "Woodworking",
+    "Ceramics",
+    "Stationery"
+  ];

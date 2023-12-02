@@ -39,11 +39,11 @@ body {
 }
 
 .custom-filter__btn {
-  @apply relative w-full min-w-[127px] flex justify-between items-center cursor-default rounded-lg bg-white py-2 px-3 text-left shadow-md sm:text-sm border;
+  @apply relative w-full min-w-[140px] flex justify-around items-center cursor-default rounded-lg bg-white py-2 px-3 text-left sm:text-sm border;
 }
 
 .custom-filter__options {
-  @apply absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm;
+  @apply absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm;
 }
 .max-width {
   @apply max-w-[1440px] mx-auto;
@@ -74,11 +74,11 @@ body {
 }
 
 .search-artist__input {
-  @apply w-full h-[48px] pl-12 p-6 bg-white font-extrabold text-primary shadow rounded-l-full max-sm:rounded-full outline-none cursor-pointer text-lg;
+  @apply w-full h-[48px] pl-12 p-6 bg-transparent font-extrabold text-white outline-none cursor-pointer text-lg;
 }
 
 .search-artist__options {
-  @apply absolute mt-1 max-h-60 w-full overflow-auto text-blue-100 rounded-md text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm;
+  @apply absolute mt-1 max-h-60 w-full overflow-auto text-blue-100 rounded-md text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm;
 }
 
 .search-artist__option {
@@ -94,5 +94,5 @@ body {
 }
 
 .searchbar__input {
-  @apply w-full h-[48px] pl-16 px-5 rounded-r-full font-extrabold text-primary text-lg max-sm:rounded-full outline-none cursor-pointer;
+  @apply w-full h-[48px] pl-16 px-5 rounded-r-full bg-transparent font-extrabold text-white text-lg max-sm:rounded-full outline-none cursor-pointer;
 }
