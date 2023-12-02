@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Input from '@/components/Input';
 import TextArea from '@/components/TextArea';
@@ -29,18 +29,12 @@ const ProductFormPage = () => {
   const baseUrl = getBaseUrl();
 
   useEffect(() => {
-    if (productId) {
-      getProduct();
-    }
-  }, [productId]);
-
-  useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/');
     }
-  }, [status]);
+  }, [status, router]);
 
-  const getProduct = async () => {
+  const getProduct = useCallback(async () => {
     try {
       const res = await fetch(
         `${baseUrl}/api/products/read?productId=${productId}`,
@@ -54,7 +48,7 @@ const ProductFormPage = () => {
     } catch (error) {
       console.error('Error fetching product:', error);
     }
-  };
+  }, [baseUrl, productId]);
 
   const handleInputChange = (field: string, value: string | number) => {
     setProduct((prevProduct) => ({ ...prevProduct, [field]: value }));
@@ -103,6 +97,12 @@ const ProductFormPage = () => {
     });
   };
 
+  useEffect(() => {
+    if (productId) {
+      getProduct();
+    }
+  }, [productId, getProduct]);
+
   return (
     <div className="flex flex-col px-2 md:px-24 my-10">
       <h1 className="text-3xl font-semibold mb-4">
@@ -115,11 +115,13 @@ const ProductFormPage = () => {
             value={product.name}
             onChange={(value) => handleInputChange('name', value)}
           />
-          <TextArea
-            label="Product Description"
-            value={product.description}
-            onChange={(value) => handleInputChange('description', value)}
-          />
+          <div className="h-28 mb-10">
+            <TextArea
+              label="Product Description"
+              value={product.description}
+              onChange={(value) => handleInputChange('description', value)}
+            />
+          </div>
           <Input
             type="number"
             label="Price"
@@ -131,25 +133,27 @@ const ProductFormPage = () => {
             value={product.category}
             onChange={(value) => handleInputChange('category', value)}
           />
-          <div className="h-40 flex">
-            {product.images?.map((i, index) => (
-              <div key={index} className="relative h-full w-full m-1">
-                <Image
-                  src={i}
-                  alt={product.name ?? 'Product'}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                />
-                <button
-                  type="button"
-                  className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded"
-                  onClick={() => handleDeleteImage(index)}
-                >
-                  Delete
-                </button>
-              </div>
-            ))}
-          </div>
+          {!!product.images?.length && (
+            <div className="h-40 flex">
+              {product.images?.map((i, index) => (
+                <div key={index} className="relative h-full w-full m-1">
+                  <Image
+                    src={i}
+                    alt={product.name ?? 'Product'}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded"
+                    onClick={() => handleDeleteImage(index)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
           <FileUpload
             onFileChange={handleImageChange}
             multiple={true}

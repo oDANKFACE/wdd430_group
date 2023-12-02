@@ -13,8 +13,9 @@ const FileUpload = ({
   clear,
   multiple = false,
 }: FileUploadProps) => {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [resetClear, setResetClear] = useState(false);
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -52,27 +53,10 @@ const FileUpload = ({
     });
   };
 
-  const handleClearFile = () => {
-    setSelectedFiles([]);
-    onFileChange([]);
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-
-    onClearFile();
-  };
-
-  useEffect(() => {
-    if (clear) {
-      handleClearFile();
-    }
-  }, [clear]);
-
   return (
     <div className="my-4">
       <label className="block text-gray-600 text-sm font-bold mb-1">
-        Choose file {multiple && '(s)'}
+        Choose file{multiple && '(s)'}
       </label>
       <input
         ref={fileInputRef}

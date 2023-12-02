@@ -1,5 +1,4 @@
-import { useRouter } from 'next/router';
-import { GetStaticProps, GetStaticPaths } from 'next';
+import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next';
 import { getArtistById, getArtistIds } from '../api/artists';
 import withLayout from '@/components/hoc/withLayout';
 import Image from 'next/image';
@@ -23,7 +22,6 @@ enum ActiveModal {
 }
 
 const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
-  const router = useRouter();
   const { data: session, status } = useSession();
 
   const [userIsArtist, setUserIsArtist] = useState(false);
@@ -47,11 +45,29 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
 
   const user = session?.user as User;
 
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
-
   const products = artist?.sellerProfile?.products;
+
+  useEffect(() => {
+    if (status === 'authenticated' && user.id === artist.id) {
+      setUserIsArtist(true);
+    } else {
+      setUserIsArtist(false);
+    }
+  }, [status, user, artist]);
+
+  useEffect(() => {
+    if (!status || !session) {
+      setUserIsArtist(false);
+    }
+  }, [status, session]);
+
+  useEffect(() => {
+    if (!!artist && artist.sellerProfile?.image) {
+      setProfilePicSrc(artist.sellerProfile.image);
+    } else {
+      setProfilePicSrc('');
+    }
+  }, [artist]);
 
   const openProfilePicModal = () => {
     setProfilePicModalProps((prevState) => ({
@@ -145,6 +161,7 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
       setNewProfilePic('');
     }
   };
+
   const handleClearFile = () => {
     setClearFileUpload(true);
     setNewProfilePic(null);
@@ -166,24 +183,6 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
         break;
     }
   };
-
-  useEffect(() => {
-    if (!!status && !!session) {
-      if (status === 'authenticated' && user.id === artist.id) {
-        setUserIsArtist(true);
-      } else {
-        setUserIsArtist(false);
-      }
-    } else {
-      setUserIsArtist(false);
-    }
-  }, [status, session]);
-
-  useEffect(() => {
-    if (!!artist && artist.sellerProfile?.image) {
-      setProfilePicSrc(artist.sellerProfile.image);
-    }
-  }, [artist]);
 
   return (
     <>
@@ -406,9 +405,9 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<ArtistDetailsProps> = async (
-  context,
-) => {
+export const getServerSideProps: GetServerSideProps<
+  ArtistDetailsProps
+> = async (context) => {
   const { params } = context;
   try {
     const artist = await getArtistById(params!.id as string);
@@ -428,31 +427,6 @@ export const getStaticProps: GetStaticProps<ArtistDetailsProps> = async (
     console.error(error);
     return {
       notFound: true,
-    };
-  }
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  try {
-    const paths = await getArtistIds();
-
-    if (paths === undefined) {
-      console.error('Error fetching artist IDs.');
-      return {
-        paths: [],
-        fallback: false,
-      };
-    }
-
-    return {
-      paths: paths.map((id) => ({ params: { id } })),
-      fallback: false,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      paths: [],
-      fallback: false,
     };
   }
 };

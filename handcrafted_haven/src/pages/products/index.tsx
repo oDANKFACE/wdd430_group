@@ -19,14 +19,13 @@ const Products = ({ products }: ProductProps) => {
   return (
     <div className="container mx-auto p-6 border border-white rounded mt-1">
       <h1 className="text-3xl font-semibold mb-4">Our Products</h1>
-      <div className="mt-2 padding-x max-widt rounded-md">
-        <div className='filters'>
+      <div className="mt-2 padding-x max-width rounded-md">
+        <div className="filters">
           <SearchBar />
-          <div className='filter-container'>
-          <p className='px-3'>Categories</p>  
-          <CustomFilter title='Categories'option={categories}
-          />
-        </div>
+          <div className="filter-container">
+            <p className="px-3">Categories</p>
+            <CustomFilter title="Categories" option={categories} />
+          </div>
         </div>
       </div>
 
@@ -38,7 +37,7 @@ const Products = ({ products }: ProductProps) => {
               {!!product.images?.length && (
                 <Image
                   src={product.images[0]}
-                  alt={product.name}
+                  alt={product.name || 'Product'}
                   width={50}
                   height={50}
                   className="w-full h-32 object-cover mb-2 rounded-md"

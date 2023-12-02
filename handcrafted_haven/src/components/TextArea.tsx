@@ -14,14 +14,14 @@ const TextArea: React.FC<TextAreaProps> = ({
   placeholder = '',
 }) => {
   return (
-    <div className="mb-4">
+    <div className="mb-4 h-full border">
       {label && (
         <label className="block text-gray-600 text-sm font-bold mb-1">
           {label}
         </label>
       )}
       <textarea
-        className="border rounded-md w-full p-2 min-h-full text-gray-800"
+        className="resize-none border rounded-md h-full w-full p-2 text-gray-800"
         value={value || ''}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
