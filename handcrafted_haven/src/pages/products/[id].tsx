@@ -7,6 +7,7 @@ import { useSession, signIn } from 'next-auth/react';
 import withLayout from '@/components/hoc/withLayout';
 import { Product, User } from '@/types';
 import { convertFullDate, getBaseUrl } from '@/helpers/utils';
+import Head from 'next/head';
 
 interface ProductDetailsProps {
   product: Product;
@@ -41,6 +42,9 @@ const ProductDetailsPage = ({ product }: ProductDetailsProps) => {
 
   return (
     <>
+      <Head>
+        <title>Product Details</title>
+      </Head>
       <div className="container mx-auto p-6 border border-white rounded my-5">
         <h1 className="text-3xl font-semibold mb-4">Product Details</h1>
         <div className="flex flex-col md:flex-row w-full sm:w-4/5 lg:w-1/2 border-4 border-accent rounded p-4 bg-gray-200 mx-auto">
@@ -107,11 +111,11 @@ const ProductDetailsPage = ({ product }: ProductDetailsProps) => {
         </div>
 
         <hr className="border-white mt-10 mb-4" />
-        <div className="flex justify-between">
+        <div className="flex flex-col sm:flex-row justify-between">
           <h2 className="text-2xl font-semibold mb-4">Product Reviews</h2>
 
           {status === 'unauthenticated' && (
-            <div>
+            <div className="mb-3 sm:mb-0">
               <button
                 type="button"
                 className="px-3 py-2 font-semibold text-dark transition-colors duration-300 bg-secondary rounded-md shadow hover:bg-emerald-400 focus:outline-none focus:ring-emerald-200 focus:ring-4"
@@ -119,17 +123,17 @@ const ProductDetailsPage = ({ product }: ProductDetailsProps) => {
               >
                 Sign in
               </button>{' '}
-              to leave a review
+              <span>to leave a review</span>
             </div>
           )}
 
           {status === 'authenticated' && (
-            <div>
+            <div className="mb-3 sm:mb-0">
               <Link
                 href={`/products/reviews?productId=${product.id}`}
                 className="px-3 py-2 font-semibold text-dark transition-colors duration-300 bg-accent rounded-md shadow hover:bg-yellow-600 focus:outline-none focus:ring-yellow-600 focus:ring-4"
               >
-                Leave a review
+                <span>Leave a review</span>
               </Link>
             </div>
           )}

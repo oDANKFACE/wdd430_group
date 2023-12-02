@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { getBaseUrl } from '@/helpers/utils';
 import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
+import Head from 'next/head';
 
 const ReviewForm = () => {
   const router = useRouter();
@@ -99,6 +100,9 @@ const ReviewForm = () => {
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-md shadow-md my-5">
+      <Head>
+        <title>Edit Review</title>
+      </Head>
       <h2 className="text-2xl font-semibold text-black mb-4">
         Update Review for {review?.product?.name}
       </h2>

@@ -1,7 +1,8 @@
-import React, { FormEvent, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { getBaseUrl } from '@/helpers/utils';
+import Head from 'next/head';
 
 interface SignInProps {}
 
@@ -59,6 +60,9 @@ const SignIn: React.FC<SignInProps> = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
+      <Head>
+        <title>Register</title>
+      </Head>
       <div className="w-full max-w-md">
         <form
           onSubmit={handleRegistration}

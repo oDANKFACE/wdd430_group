@@ -4,6 +4,7 @@ import withLayout from '@/components/hoc/withLayout';
 import Link from 'next/link';
 import { convertDate, getBaseUrl } from '@/helpers/utils';
 import { Artist } from '@/types';
+import Head from 'next/head';
 
 interface ArtistProps {
   artists: Artist[];
@@ -16,6 +17,9 @@ const Artists = ({ artists }: ArtistProps) => {
     <div
       className={`flex min-h-screen flex-col items-center px-4 md:px-24 my-10`}
     >
+      <Head>
+        <title>Artists</title>
+      </Head>
       <h1 className="text-4xl mb-10">Artists</h1>
       <div className="w-4/5">
         {artists.map((a) => (

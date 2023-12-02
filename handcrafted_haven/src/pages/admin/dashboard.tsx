@@ -5,6 +5,7 @@ import withLayout from '@/components/hoc/withLayout';
 import { SessionUser, Product, Review, User } from '@/types';
 import { convertDate } from '@/helpers/utils';
 import Loader from '@/components/Loader';
+import Head from 'next/head';
 
 const Dashboard = () => {
   const { data: session, status } = useSession();
@@ -63,6 +64,9 @@ const Dashboard = () => {
   if (user?.role! !== 'ADMIN') {
     return (
       <section className="grid h-screen place-items-center">
+        <Head>
+          <title>Admin Dashboard</title>
+        </Head>
         <div className="w-25">
           <div className="flex flex-col">
             <p>You do not have permission to view this page!</p>
@@ -80,6 +84,9 @@ const Dashboard = () => {
 
   return (
     <div className={`flex min-h-screen flex-col px-4 md:px-24 my-10`}>
+      <Head>
+        <title>Admin Dashboard</title>
+      </Head>
       <h1 className="text-4xl">Admin Dashboard</h1>
       <div className="mt-5">
         <div className="flex space-x-4 mb-4">

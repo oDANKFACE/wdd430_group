@@ -8,6 +8,7 @@ import Link from 'next/link';
 import SearchBar from '@/components/SearchBar';
 import CustomFilter from '@/components/CustomFilter';
 import { categories } from '@/constants/constants';
+import Head from 'next/head';
 
 interface ProductProps {
   products: Product[];
@@ -18,6 +19,9 @@ const url = getBaseUrl();
 const Products = ({ products }: ProductProps) => {
   return (
     <div className="container mx-auto p-6 border border-white rounded mt-1">
+      <Head>
+        <title>Product Listing</title>
+      </Head>
       <h1 className="text-3xl font-semibold mb-4">Our Products</h1>
       <div className="mt-2 padding-x max-width rounded-md">
         <div className="filters">

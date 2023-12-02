@@ -12,9 +12,9 @@ const Footer = () => {
             width={25}
             height={25}
           />
-          <h5 className="font-semibold ms-1">Handcrafted Haven</h5>
+          <h5 className="hidden sm:inline-block font-semibold ms-1">Handcrafted Haven</h5>
         </div>
-        <p className="text-gray-500">
+        <p className="text-gray-500 ms-2">
           Discover and support unique handmade treasures.
         </p>
       </div>

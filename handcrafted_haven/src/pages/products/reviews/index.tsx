@@ -4,6 +4,7 @@ import { Review, Product, User } from '@/types';
 import { useRouter } from 'next/router';
 import { getBaseUrl } from '@/helpers/utils';
 import { useSession, signIn } from 'next-auth/react';
+import Head from 'next/head';
 
 const ReviewForm = () => {
   const router = useRouter();
@@ -75,6 +76,9 @@ const ReviewForm = () => {
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-md shadow-md my-5">
+      <Head>
+        <title>Product Review</title>
+      </Head>
       <h2 className="text-2xl font-semibold text-black mb-4">
         Add a Review for {product?.name}
       </h2>

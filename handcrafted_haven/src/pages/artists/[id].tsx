@@ -1,5 +1,5 @@
-import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next';
-import { getArtistById, getArtistIds } from '../api/artists';
+import { GetServerSideProps } from 'next';
+import { getArtistById} from '../api/artists';
 import withLayout from '@/components/hoc/withLayout';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,6 +10,7 @@ import Modal, { ModalProps } from '@/components/Modal';
 import FileUpload from '@/components/FileUpload';
 import { getBaseUrl } from '@/helpers/utils';
 import TextArea from '@/components/TextArea';
+import Head from 'next/head';
 
 interface ArtistDetailsProps {
   artist: Artist;
@@ -65,7 +66,7 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
     if (!!artist && artist.sellerProfile?.image) {
       setProfilePicSrc(artist.sellerProfile.image);
     } else {
-      setProfilePicSrc('');
+      setProfilePicSrc('/images/profile-pic.png');
     }
   }, [artist]);
 
@@ -186,6 +187,9 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
 
   return (
     <>
+      <Head>
+        <title>Artist Details</title>
+      </Head>
       <div className="flex min-h-screen flex-col px-4 md:px-24 my-10">
         <h1 className="text-3xl font-semibold mb-4">Artist Profile</h1>
         <div className="flex flex-col overflow-hidden bg-white shadow-md rounded py-5 px-2 pt-2 pb-8 mb-4">

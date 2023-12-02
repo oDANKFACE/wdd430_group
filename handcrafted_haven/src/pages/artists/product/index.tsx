@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react';
 import FileUpload from '@/components/FileUpload';
 import Image from 'next/image';
 import Link from 'next/link';
+import Head from 'next/head';
 
 const ProductFormPage = () => {
   const router = useRouter();
@@ -123,6 +124,9 @@ const ProductFormPage = () => {
 
   return (
     <div className="flex flex-col px-2 md:px-24 my-10">
+      <Head>
+        <title>Artist Products</title>
+      </Head>
       <h1 className="text-3xl font-semibold mb-4">
         {productId ? 'Edit Product' : 'Add New Product'}
       </h1>
@@ -152,7 +156,7 @@ const ProductFormPage = () => {
             onChange={(value) => handleInputChange('category', value)}
           />
           {!!product.images?.length && (
-            <div className="h-40 flex">
+            <div className="h-96 sm:h-40 flex flex-col sm:flex-row">
               {product.images?.map((i, index) => (
                 <div key={index} className="relative h-full w-full m-1">
                   <Image

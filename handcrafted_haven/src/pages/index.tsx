@@ -1,33 +1,19 @@
-import { useEffect } from 'react';
 import { Inter } from 'next/font/google';
-import { useSession, signIn } from 'next-auth/react';
 import Section from '@/components/Section';
 import Card from '@/components/Card';
-import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
-import Loader from '@/components/Loader';
 import withLayout from '@/components/hoc/withLayout';
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] });
 
 const Home = () => {
- /*  const { status } = useSession();
-
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      signIn();
-    }
-  }, [status]);
-
-  if (status !== 'authenticated') {
-    return <Loader size={'xl'} />;
-  } */
-
   return (
-    <main
+    <div
       className={`flex min-h-screen flex-col items-center justify-between  ${inter.className}`}
     >
-      {/* <Navbar /> */}
+      <Head>
+        <title>Handcrafted Haven</title>
+      </Head>
       <Section>
         <div className="text-center">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
@@ -92,8 +78,7 @@ const Home = () => {
           </p>
         </div>
       </Section>
-      {/* <Footer /> */}
-    </main>
+    </div>
   );
 }
 

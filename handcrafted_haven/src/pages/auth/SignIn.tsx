@@ -3,6 +3,7 @@ import { getSession, signIn } from 'next-auth/react';
 import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import Head from 'next/head';
 
 const Signin = () => {
   const email = useRef('');
@@ -27,6 +28,9 @@ const Signin = () => {
 
   return (
     <div className="flex items-center min-h-screen p-4 bg-dark lg:justify-center">
+      <Head>
+        <title>Sign In</title>
+      </Head>
       <div className="flex flex-col overflow-hidden bg-white rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md">
         <div className="p-4 py-6 text-primary bg-tertiary md:w-80 md:flex-shrink-0 md:flex md:flex-col md:items-center md:justify-evenly">
           <div className="my-3 text-4xl font-bold tracking-wider text-center">
