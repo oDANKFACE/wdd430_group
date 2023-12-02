@@ -33,16 +33,16 @@ export interface SellerProfile {
 }
 
 export interface Product {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   description?: string | null;
-  price: number;
+  price?: number;
   images?: string[];
-  category: string;
-  seller: SellerProfile;
-  sellerId: string;
-  createdAt: Date | string;
-  updatedAt: Date | string;
+  category?: string;
+  seller?: SellerProfile;
+  sellerId?: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
   reviews?: Review[];
 }
 

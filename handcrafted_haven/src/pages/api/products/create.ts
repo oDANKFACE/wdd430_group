@@ -9,8 +9,9 @@ export default async function handle(
   res: NextApiResponse,
 ) {
   try {
-    const { name, description, price, images, category, sellerId } =
-      req.body as Product;
+    const { name, description, price, images, category, sellerId } = JSON.parse(
+      req.body,
+    ) as Product;
 
     if (!name || !price || !category || !sellerId) {
       return res.status(400).json({ error: 'Missing required parameters.' });
@@ -20,10 +21,14 @@ export default async function handle(
       data: {
         name,
         description,
-        price,
+        price: typeof price === 'string' ? +price : price,
         images,
         category,
-        sellerId,
+        seller: {
+          connect: {
+            userId: sellerId,
+          },
+        },
       },
     });
 
@@ -33,4 +38,3 @@ export default async function handle(
     res.status(500).json({ error: 'Internal server error.' });
   }
 }
-

@@ -12,6 +12,7 @@ export default async function updateProduct(
     }
 
     const { productId } = req.query;
+    console.log({ productId });
 
     if (!productId) {
       return res
@@ -19,8 +20,9 @@ export default async function updateProduct(
         .json({ error: 'Missing required parameter: productId' });
     }
 
-    const { name, description, price, images, category, sellerId } =
-      req.body as Product;
+    const { name, description, price, images, category, sellerId } = JSON.parse(
+      req.body,
+    ) as Product;
 
     if (!name || !price || !category || !sellerId) {
       return res.status(400).json({ error: 'Missing required parameters.' });
@@ -33,7 +35,7 @@ export default async function updateProduct(
       data: {
         name,
         description,
-        price,
+        price: typeof price === 'string' ? +price : price,
         images,
         category,
         sellerId,

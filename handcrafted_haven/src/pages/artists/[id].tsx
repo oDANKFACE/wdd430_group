@@ -8,8 +8,9 @@ import { Artist, Product, SellerProfile, User } from '@/types';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import Modal, { ModalProps } from '@/components/Modal';
-import FileUpload from '@/components/FileUplaod';
+import FileUpload from '@/components/FileUpload';
 import { getBaseUrl } from '@/helpers/utils';
+import TextArea from '@/components/TextArea';
 
 interface ArtistDetailsProps {
   artist: Artist;
@@ -18,6 +19,7 @@ interface ArtistDetailsProps {
 enum ActiveModal {
   ProfilePic,
   Bio,
+  NewProduct,
 }
 
 const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
@@ -29,7 +31,15 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
   const [newProfilePic, setNewProfilePic] = useState<string | null>(null);
   const [clearFileUpload, setClearFileUpload] = useState(false);
   const [activeModal, setActiveModal] = useState<ActiveModal>();
-  const [modalProps, setModalProps] = useState<ModalProps>({
+  const [newBio, setNewBio] = useState<string | null | undefined>(
+    artist.sellerProfile?.bio,
+  );
+  const [profilePicModalProps, setProfilePicModalProps] = useState<ModalProps>({
+    isOpen: false,
+    title: '',
+    onClose: () => {},
+  });
+  const [bioModalProps, setBioModalProps] = useState<ModalProps>({
     isOpen: false,
     title: '',
     onClose: () => {},
@@ -46,7 +56,7 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
   const products = artist?.sellerProfile?.products;
 
   const openProfilePicModal = () => {
-    setModalProps((prevState) => ({
+    setProfilePicModalProps((prevState) => ({
       ...prevState,
       isOpen: true,
       title: 'Update Profile Picture',
@@ -55,7 +65,7 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
   };
 
   const openBioModal = () => {
-    setModalProps((prevState) => ({
+    setBioModalProps((prevState) => ({
       ...prevState,
       isOpen: true,
       title: 'Update Bio',
@@ -97,11 +107,37 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
     }
   };
 
-  const handleEditListing = () => {
-    console.log('Changing listing');
+  const handleTextChange = (newText: string) => {
+    setNewBio(newText);
   };
-  const handleEditBio = () => {
-    console.log('Changing Bio');
+
+  const handleEditBio = async () => {
+    if (!!newBio) {
+      const sellerProfile = {
+        bio: newBio,
+        image: profilePicSrc,
+      };
+
+      try {
+        const res = await fetch(
+          `${getBaseUrl()}/api/artists/update?artistId=${artist.id}`,
+          {
+            method: 'PATCH',
+            body: JSON.stringify(sellerProfile),
+          },
+        );
+
+        if (!res.ok) {
+          throw Error('Failed to update profile picture.');
+        }
+
+        const profile = (await res.json()) as SellerProfile;
+        setNewBio(profile.bio);
+        closeModal();
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   const onFileChange = (base64String: string | null) => {
@@ -115,23 +151,21 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
     setNewProfilePic(null);
   };
 
-  const closeModal = () =>
-    setModalProps((prevState) => ({
-      ...prevState,
-      isOpen: false,
-    }));
-
-  const acceptHandler = () => {
-    let handler;
+  const closeModal = () => {
     switch (activeModal) {
       case ActiveModal.ProfilePic:
-        handler = handleChangePhoto;
+        setProfilePicModalProps((prevState) => ({
+          ...prevState,
+          isOpen: false,
+        }));
         break;
       case ActiveModal.Bio:
-        handler = handleEditBio;
+        setBioModalProps((prevState) => ({
+          ...prevState,
+          isOpen: false,
+        }));
         break;
     }
-    return handler ? handler() : null;
   };
 
   useEffect(() => {
@@ -151,12 +185,6 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
       setProfilePicSrc(artist.sellerProfile.image);
     }
   }, [artist]);
-
-  useEffect(() => {
-    if (!!activeModal) {
-      acceptHandler();
-    }
-  }, [activeModal]);
 
   return (
     <>
@@ -194,7 +222,7 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
                     )}
                   </div>
                   <p className="flex flex-col text-primary">
-                    <span>{artist.sellerProfile?.bio}</span>
+                    <span>{newBio}</span>
                   </p>
                 </div>
               </div>
@@ -270,7 +298,7 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
                               >
                                 <Image
                                   src={i}
-                                  alt={p.name}
+                                  alt={p.name ?? 'Product'}
                                   fill
                                   style={{ objectFit: 'cover' }}
                                 />
@@ -290,13 +318,12 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
                     </Link>
                     {userIsArtist && (
                       <div className="my-4 text-center">
-                        <button
-                          type="button"
+                        <Link
+                          href={`/artists/product?productId=${p.id}`}
                           className="px-12 py-1 text-lg font-semibold text-dark transition-colors duration-300 bg-secondary rounded-md shadow hover:bg-emerald-400 focus:outline-none focus:ring-emerald-200 focus:ring-4"
-                          onClick={handleEditListing}
                         >
                           Edit Listing
-                        </button>
+                        </Link>
                       </div>
                     )}
                   </div>
@@ -306,16 +333,15 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
 
             {userIsArtist && (
               <div className="flex justify-center">
-                <button
-                  type="button"
+                <Link
+                  href={`/artists/product`}
                   className="ps-2 pb-2 pe-2 transition-colors duration-300 bg-accent shadow rounded-full max-w-full hover:bg-yellow-500 focus:outline-none focus:ring-yellow-500 focus:ring-4 flex"
-                  onClick={handleChangePhoto}
                 >
                   <div className="flex items-center">
                     <span className="text-2xl font-bold">&#x2B;</span>
                     <span className="pt-2 ms-1">Add Product</span>
                   </div>
-                </button>
+                </Link>
               </div>
             )}
           </div>
@@ -324,8 +350,8 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
 
       {/* Profile Pic Modal */}
       <Modal
-        title={modalProps.title}
-        isOpen={modalProps.isOpen}
+        title={profilePicModalProps.title}
+        isOpen={profilePicModalProps.isOpen}
         onClose={closeModal}
       >
         <FileUpload
@@ -342,7 +368,36 @@ const ArtistDetailsPage = ({ artist }: ArtistDetailsProps) => {
           </button>
           <button
             className="mt-4 bg-primary text-white px-4 py-2 rounded hover:bg-blue-800"
-            onClick={acceptHandler}
+            onClick={handleChangePhoto}
+          >
+            Update
+          </button>
+        </div>
+      </Modal>
+
+      {/* Bio Modal */}
+      <Modal
+        title={bioModalProps.title}
+        isOpen={bioModalProps.isOpen}
+        onClose={closeModal}
+      >
+        <div className="h-64 sm:h-48">
+          <TextArea
+            value={newBio}
+            onChange={handleTextChange}
+            placeholder="Type something..."
+          />
+        </div>
+        <div className="flex justify-end">
+          <button
+            className="mt-4 mx-3 px-4 py-2 rounded border border-gray-700 hover:bg-gray-500 hover:text-white"
+            onClick={closeModal}
+          >
+            Cancel
+          </button>
+          <button
+            className="mt-4 bg-primary text-white px-4 py-2 rounded hover:bg-blue-800"
+            onClick={handleEditBio}
           >
             Update
           </button>
