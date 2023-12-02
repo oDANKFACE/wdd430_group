@@ -112,7 +112,7 @@ const Navbar = () => {
               <Link
                 href="/artists"
                 className={`block py-2 px-3 rounded md:p-0  ${
-                  activePage.includes('/artists')
+                  activePage === '/artists'
                     ? 'md:text-secondary md:bg-transparent bg-secondary text-dark'
                     : 'md:hover:bg-transparent md:hover:text-secondary hover:bg-gray-700 text-white'
                 }`}

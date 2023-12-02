@@ -10,27 +10,32 @@ export default async function deleteReview(
       return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    const { ProductId } = req.query;
+    const { productId } = req.query;
 
-    if (!ProductId) {
+    if (!productId) {
       return res
         .status(400)
-        .json({ error: 'Missing required parameter: ProductId' });
+        .json({ error: 'Missing required parameter: productId' });
     }
 
-    const parsedProductId = Array.isArray(ProductId) ? ProductId[0] : ProductId;
+    const parsedProductId = Array.isArray(productId) ? productId[0] : productId;
 
-    const deletedProduct = await prisma.product.delete({
-      where: {
-        id: parsedProductId,
-      },
-    });
+    await prisma.$transaction([
+      prisma.review.deleteMany({
+        where: {
+          productId: parsedProductId,
+        },
+      }),
+      prisma.product.delete({
+        where: {
+          id: parsedProductId,
+        },
+      }),
+    ]);
 
-    res
-      .status(200)
-      .json({ message: 'Review deleted successfully', deletedProduct });
+    res.status(200).json({ message: 'Product deleted successfully' });
   } catch (error) {
-    console.error('Error deleting review:', error);
+    console.error('Error deleting product:', error);
     res.status(500).json({ error: 'Internal server error.' });
   }
 }

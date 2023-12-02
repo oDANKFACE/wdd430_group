@@ -8,6 +8,7 @@ import withLayout from '@/components/hoc/withLayout';
 import { useSession } from 'next-auth/react';
 import FileUpload from '@/components/FileUpload';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const ProductFormPage = () => {
   const router = useRouter();
@@ -52,6 +53,23 @@ const ProductFormPage = () => {
 
   const handleInputChange = (field: string, value: string | number) => {
     setProduct((prevProduct) => ({ ...prevProduct, [field]: value }));
+  };
+
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(
+        `${baseUrl}/api/products/delete?productId=${productId}`,
+        {
+          method: 'DELETE',
+        },
+      );
+      if (!res.ok) {
+        throw Error('Failed to delete product');
+      }
+      router.push(`/artists/${user.id}`);
+    } catch (error: any) {
+      console.error('Error submitting product:', error);
+    }
   };
 
   const handleSubmit = async () => {
@@ -109,7 +127,7 @@ const ProductFormPage = () => {
         {productId ? 'Edit Product' : 'Add New Product'}
       </h1>
       <div className="flex justify-center w-full">
-        <form className="w-4/5 md:w-1/2 border rounded p-4 bg-gray-200">
+        <form className="w-4/5 md:3/4 lg:w-1/2 border rounded p-4 bg-gray-200">
           <Input
             label="Product Name"
             value={product.name}
@@ -163,14 +181,22 @@ const ProductFormPage = () => {
             clear={clearFileUpload}
           />
 
-          <div className="flex flex-col sm:flex-row justify-around">
-            <button
-              type="button"
-              onClick={handleSubmit}
-              className="px-12 py-1 text-lg font-semibold text-dark transition-colors duration-300 bg-white border-2 border-gray-500 rounded-md shadow hover:bg-gray-500 focus:outline-none focus:ring-gray-200 hover:text-white focus:ring-4"
+          <div className="flex flex-col md:flex-row justify-around">
+            <Link
+              href={`/artists/${user?.id}`}
+              className="px-12 py-1 text-lg text-center font-semibold text-dark transition-colors duration-300 bg-white border-2 border-gray-500 rounded-md shadow hover:bg-gray-500 focus:outline-none focus:ring-gray-200 hover:text-white focus:ring-4"
             >
               Cancel
-            </button>
+            </Link>
+            {productId && (
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="px-12 py-1 text-lg font-semibold text-dark transition-colors duration-300 bg-white border-2 border-red-500 rounded-md shadow hover:bg-red-500 focus:outline-none focus:ring-gray-200 hover:text-white focus:ring-4 my-2 md:my-0"
+              >
+                Delete
+              </button>
+            )}
             <button
               type="button"
               onClick={handleSubmit}
