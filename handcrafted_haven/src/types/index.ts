@@ -62,6 +62,12 @@ export interface Review {
 
 export interface SearchArtistProps {
   artist: string;
-  setArtist: (artist: string) => void;
   artistName?: Artist[];
+  setArtist: (artist: string) => void;
 }
+
+export interface CustomFilterProps {
+  title: string;
+  option: string[];
+}
+
